@@ -1,0 +1,86 @@
+
+import tkinter as tk
+import pandas as pd
+from matplotlib import pyplot as plt
+
+root = tk.Tk()
+root.geometry("1000x450")
+root.title("Expenditure Tracker")
+root.configure(background="#FFB6C1")
+
+item_list = []
+
+def add_item():
+    item=item_txt.get()
+    Quantity=Quantity_txt.get()
+    cost=Cost_txt.get()
+    total=int(Quantity)*int(cost)
+    #print(item, Quantity, cost, total)
+    single_item_lbl = tk.Label(frame2, text=f"{item}\t\t{Quantity}\t\t{cost}\t\t{total}", bg="#ffb6c1", fg="#232323", font=("Arial 15"))
+    single_item={"Item":item, "Quantity":Quantity, "Cost":cost, "Total Amount ":total}
+    item_list.append(single_item)
+    single_item_lbl.pack(pady=5)
+
+
+def clear_item():
+    item_txt.delete(0, "end")
+    Quantity_txt.delete(0, "end")
+    Cost_txt.delete(0, "end")
+
+def analyse():
+    df=pd.DataFrame(item_list)
+    items = df['Item']
+    total = df['Total Amount']
+    fig = plt.figure(figsize=(10, 5))
+    plt.bar(items, total, color='red', width=0.4)
+    plt.ylabel("Cost of items")
+    plt.xlabel("Items Purchased")
+    plt.title("Expenditure Tracker Analysis")
+    plt.show()
+    #print(df)
+    
+
+title_lbl = tk.Label(root, text="Expenditure Tracker", bg="#ffffcc", fg="#232323", font=("Arial 20") )
+title_lbl.pack(pady=20)
+
+item_lbl = tk.Label(root, text="Add Items :", bg="#ffb6c1", fg="#232323", font=("Arial 15"))
+item_lbl.pack(pady=(20, 5))
+
+item_txt = tk.Entry(root, font=("Arial 10"))
+item_txt.pack()
+
+Quantity_lbl = tk.Label(root, text="Add Quantity :", bg="#ffb6c1", fg="#232323", font=("Arial 15") )
+Quantity_lbl.pack(pady=(20, 5))
+
+Quantity_txt = tk.Entry(root, font=("Arial 10"))
+Quantity_txt.pack()
+
+cost_lbl = tk.Label(root, text="Cost Per Unit :", bg="#ffb6c1", fg="#232323", font=("Arial 15") )
+cost_lbl.pack(pady=(20, 5))
+
+Cost_txt = tk.Entry(root, font=("Arial 10"))
+Cost_txt.pack()
+
+frame1 = tk.Frame(root, bg="#ffb6c1")
+
+add_btn = tk.Button(frame1, text="Add Item", font=("Arial 15"), command=add_item)
+add_btn.pack( padx=15, pady=10, side=tk.LEFT)
+
+clear_btn = tk.Button(frame1, text="Clear", font=("Arial 15"), command=clear_item)
+clear_btn.pack(side=tk.RIGHT)
+
+frame1.pack()
+
+display_lbl = tk.Label(root, text="Expenses", bg="#ffb6c1", fg="#232323", font=("Arial 15") )
+display_lbl.pack(pady=(20, 5))
+
+frame2 = tk.Frame(root, bg="#ffb6c1")
+heading_lbl = tk.Label(frame2, text="Item\t\tQuantity\t\tUnit Cost\t\tTotal", bg="#ffb6c1", fg="#232323", font=("Arial 15"))
+heading_lbl.pack(pady=5)
+frame2.pack()
+
+analyse_btn = tk.Button(root, text="analyse", fg="#232323", font=("Arial 15"),command=analyse)
+analyse_btn.pack(pady=20)
+
+root.mainloop()
+
